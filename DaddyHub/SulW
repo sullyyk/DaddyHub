@@ -1,0 +1,552 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local Daddyhub = Instance.new("ScreenGui")
+local DaddyHubFrame = Instance.new("Frame")
+local Flybutton = Instance.new("TextButton")
+local Silentaimbutton = Instance.new("TextButton")
+local Espbutton = Instance.new("TextButton")
+local AImlockbutton = Instance.new("TextButton")
+local Credits = Instance.new("TextButton")
+local Credits2 = Instance.new("TextButton")
+local Credits3 = Instance.new("TextButton")
+local DaddyhubTitle = Instance.new("TextLabel")
+
+--Properties:
+
+Daddyhub.Name = "Daddyhub"
+Daddyhub.Parent = game.CoreGui
+
+DaddyHubFrame.Name = "DaddyHub Frame"
+DaddyHubFrame.Parent = Daddyhub
+DaddyHubFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DaddyHubFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+DaddyHubFrame.Position = UDim2.new(0.195802003, 0, 0.291940957, 0)
+DaddyHubFrame.Size = UDim2.new(0, 491, 0, 285)
+DaddyHubFrame.Active = true
+
+
+
+Flybutton.Name = "Fly button"
+Flybutton.Parent = DaddyHubFrame
+Flybutton.BackgroundColor3 = Color3.fromRGB(43, 6, 255)
+Flybutton.BorderColor3 = Color3.fromRGB(243, 238, 255)
+Flybutton.Position = UDim2.new(0.0530445576, 0, 0.26347208, 0)
+Flybutton.Size = UDim2.new(0, 200, 0, 50)
+Flybutton.Font = Enum.Font.Highway
+Flybutton.Text = "Fly"
+Flybutton.TextColor3 = Color3.fromRGB(0, 0, 0)
+Flybutton.TextSize = 23.000
+Flybutton.MouseButton1Down:Connect(function()
+	local plr = game.Players.LocalPlayer
+	local mouse = plr:GetMouse()
+
+	localplayer = plr
+
+	if workspace:FindFirstChild("Core") then
+		workspace.Core:Destroy()
+	end
+
+	local Core = Instance.new("Part")
+	Core.Name = "Core"
+	Core.Size = Vector3.new(0.05, 0.05, 0.05)
+
+	spawn(function()
+		Core.Parent = workspace
+		local Weld = Instance.new("Weld", Core)
+		Weld.Part0 = Core
+		Weld.Part1 = localplayer.Character.LowerTorso
+		Weld.C0 = CFrame.new(0, 0, 0)
+	end)
+
+	workspace:WaitForChild("Core")
+
+	local torso = workspace.Core
+	flying = true
+	local speed=10
+	local keys={a=false,d=false,w=false,s=false} 
+	local e1
+	local e2
+	local function start()
+		local pos = Instance.new("BodyPosition",torso)
+		local gyro = Instance.new("BodyGyro",torso)
+		pos.Name="EPIXPOS"
+		pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+		pos.position = torso.Position
+		gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+		gyro.cframe = torso.CFrame
+		repeat
+			wait()
+			localplayer.Character.Humanoid.PlatformStand=true
+			local new=gyro.cframe - gyro.cframe.p + pos.position
+			if not keys.w and not keys.s and not keys.a and not keys.d then
+				speed=5
+			end
+			if keys.w then 
+				new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+				speed=speed+0
+			end
+			if keys.s then 
+				new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+				speed=speed+0
+			end
+			if keys.d then 
+				new = new * CFrame.new(speed,0,0)
+				speed=speed+0
+			end
+			if keys.a then 
+				new = new * CFrame.new(-speed,0,0)
+				speed=speed+0
+			end
+			if speed>10 then
+				speed=5
+			end
+			pos.position=new.p
+			if keys.w then
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrameCFrame.Angles(-math.rad(speed0),0,0)
+			elseif keys.s then
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrameCFrame.Angles(math.rad(speed0),0,0)
+			else
+				gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+			end
+		until flying == false
+		if gyro then gyro:Destroy() end
+		if pos then pos:Destroy() end
+		flying=false
+		localplayer.Character.Humanoid.PlatformStand=false
+		speed=10
+	end
+	e1=mouse.KeyDown:connect(function(key)
+		if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+		if key=="w" then
+			keys.w=true
+		elseif key=="s" then
+			keys.s=true
+		elseif key=="a" then
+			keys.a=true
+		elseif key=="d" then
+			keys.d=true
+		elseif key=="x" then
+			if flying==true then
+				flying=false
+			else
+				flying=true
+				start()
+			end
+		end
+	end)
+	e2=mouse.KeyUp:connect(function(key)
+		if key=="w" then
+			keys.w=false
+		elseif key=="s" then
+			keys.s=false
+		elseif key=="a" then
+			keys.a=false
+		elseif key=="d" then
+			keys.d=false
+		end
+	end)
+	start()	
+end)
+
+
+Silentaimbutton.Name = "Silent aim button"
+Silentaimbutton.Parent = DaddyHubFrame
+Silentaimbutton.BackgroundColor3 = Color3.fromRGB(43, 6, 255)
+Silentaimbutton.BorderColor3 = Color3.fromRGB(235, 235, 235)
+Silentaimbutton.Position = UDim2.new(0.0529531538, 0, 0.538807094, 0)
+Silentaimbutton.Size = UDim2.new(0, 200, 0, 50)
+Silentaimbutton.Font = Enum.Font.Highway
+Silentaimbutton.Text = "Silent Aim"
+Silentaimbutton.TextColor3 = Color3.fromRGB(0, 0, 0)
+Silentaimbutton.TextSize = 23.000
+Silentaimbutton.MouseButton1Down:Connect(function()
+	-- // Dependencies
+	local Aiming = loadstring(game:HttpGet("https://pastebin.com/raw/fKyW0Wfx%22))()
+		Aiming.TeamCheck(false)
+
+		-- // Services
+		local Workspace = game:GetService("Workspace")
+		local Players = game:GetService("Players")
+		local RunService = game:GetService("RunService")
+		local UserInputService = game:GetService("UserInputService")
+
+		-- // Vars
+		local LocalPlayer = Players.LocalPlayer
+		local Mouse = LocalPlayer:GetMouse()
+		local CurrentCamera = Workspace.CurrentCamera
+
+		local DaHoodSettings = {
+			SilentAim = true,
+			Prediction = 0.165,
+		}
+		getgenv().DaHoodSettings = DaHoodSettings
+
+		-- // Overwrite to account downed
+		function Aiming.Check()
+			-- // Check A
+			if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
+				return false
+			end
+
+			-- // Check if downed
+			local Character = Aiming.Character(Aiming.Selected)
+			local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
+			local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+
+			-- // Check B
+			if (KOd or Grabbed) then
+				return false
+			end
+
+			-- //
+			return true
+		end
+
+		-- // Hook
+		local index
+		index = hookmetamethod(game, "index", function(t, k)
+			-- // Check if it trying to get our mouse's hit or target and see if we can use it
+			if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+				-- // Vars
+				local SelectedPart = Aiming.SelectedPart
+
+				-- // Hit/Target
+				if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+					-- // Hit to account prediction
+					local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+					-- // Return modded val
+					return (k == "Hit" and Hit or SelectedPart)
+				end
+			end
+
+			-- // Return
+			return index(t, k)
+		end)
+end)
+
+AImlockbutton.Name = "AImlock button"
+AImlockbutton.Parent = DaddyHubFrame
+AImlockbutton.BackgroundColor3 = Color3.fromRGB(43, 6, 255)
+AImlockbutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+AImlockbutton.Position = UDim2.new(0.553971469, 0, 0.25999999, 0)
+AImlockbutton.Size = UDim2.new(0, 200, 0, 50)
+AImlockbutton.Font = Enum.Font.Highway
+AImlockbutton.Text = "Aimlock (Q)"
+AImlockbutton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AImlockbutton.TextSize = 23.000
+AImlockbutton.MouseButton1Down:Connect(function()
+		--[[ MANO X LOCK --> ManoW (几口Mano76卡飞#7676)
+]]
+	-- Toggle
+	getgenv().Target = true
+	-- Configuration
+	getgenv().Key = Enum.KeyCode.Q
+	getgenv().Prediction = 0.12405
+	getgenv().ChatMode = false
+	getgenv().NotifMode = true
+	getgenv().PartMode = true
+	getgenv().AirshotFunccc = true
+	getgenv().Partz = "HumanoidRootPart"
+	getgenv().AutoPrediction = false
+	--
+	_G.Types = {
+		Ball = Enum.PartType.Ball,
+		Block = Enum.PartType.Block, 
+		Cylinder = Enum.PartType.Cylinder
+	}
+
+	--variables                 
+	local Tracer = Instance.new("Part", game.Workspace)
+	Tracer.Name = "gay" 
+	Tracer.Anchored = true      
+	Tracer.CanCollide = false
+	Tracer.Transparency = 0.8
+	Tracer.Parent = game.Workspace  
+	Tracer.Shape = _G.Types.Block
+	Tracer.Size = Vector3.new(14,14,14)
+	Tracer.Color = Color3.fromRGB(255,7,255)
+
+	--
+	local plr = game.Players.LocalPlayer
+	local mouse = plr:GetMouse()
+	local Runserv = game:GetService("RunService")
+
+	circle = Drawing.new("Circle")
+	circle.Color = Color3.fromRGB(171,0,255)
+	circle.Thickness = 0
+	circle.NumSides = 732
+	circle.Radius = 120
+	circle.Thickness = 0
+	circle.Transparency = 0.7
+	circle.Visible = true
+	circle.Filled = false
+
+	Runserv.RenderStepped:Connect(function()
+		circle.Position = Vector2.new(mouse.X,mouse.Y+35)
+	end)
+
+	local guimain = Instance.new("Folder", game.CoreGui)
+	local CC = game:GetService"Workspace".CurrentCamera
+	local LocalMouse = game.Players.LocalPlayer:GetMouse()
+	local Locking = false
+
+
+	--
+	if getgenv().valiansh == true then
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "Valiant",
+			Text = "Already Loaded!",
+			Duration = 5
+
+		})
+		return
+	end
+
+	getgenv().valiansh = true
+
+	local UserInputService = game:GetService("UserInputService")
+
+	UserInputService.InputBegan:Connect(function(keygo,ok)
+		if (not ok) then
+			if (keygo.KeyCode == getgenv().Key) then
+				if getgenv().Target == true then
+					Locking = not Locking
+
+					if Locking then
+						Plr =  getClosestPlayerToCursor()
+						if getgenv().ChatMode then
+							local A_1 = "Target: "..tostring(Plr.Character.Humanoid.DisplayName) local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
+						end 
+						if getgenv().NotifMode then
+							game.StarterGui:SetCore("SendNotification", {
+								Title = "";
+								Text = "Target: "..tostring(Plr.Character.Humanoid.DisplayName);
+
+							})
+						end
+					elseif not Locking then
+						if getgenv().ChatMode then
+							local A_1 = "Unlocked!" local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
+						end 
+						if getgenv().NotifMode then
+							game.StarterGui:SetCore("SendNotification", {
+								Title = "",
+								Text = "Unlocked",
+								Duration = 5
+							})
+						elseif getgenv().Target == false then
+							game.StarterGui:SetCore("SendNotification", {
+								Title = "",
+								Text = "Target isn't enabled",
+								Duration = 5
+
+							})
+
+						end
+
+
+					end     end   
+			end
+		end
+	end)
+
+	function getClosestPlayerToCursor()
+		local closestPlayer
+		local shortestDistance = circle.Radius
+
+		for i, v in pairs(game.Players:GetPlayers()) do
+			if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("LowerTorso") then
+				local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+				local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(LocalMouse.X, LocalMouse.Y)).magnitude
+				if magnitude < shortestDistance then
+					closestPlayer = v
+					shortestDistance = magnitude
+				end
+			end
+		end
+		return closestPlayer
+	end
+	--
+	if getgenv().PartMode then
+		game:GetService"RunService".Stepped:connect(function()
+			if Locking and Plr.Character and Plr.Character:FindFirstChild("LowerTorso") then
+				Tracer.CFrame = CFrame.new(Plr.Character.LowerTorso.Position+(Plr.Character.LowerTorso.Velocity*Prediction))
+			else
+				Tracer.CFrame = CFrame.new(0, 9999, 0)
+
+			end
+		end)
+	end
+
+
+
+	--
+	local rawmetatable = getrawmetatable(game)
+	local old = rawmetatable.__namecall
+	setreadonly(rawmetatable, false)
+	rawmetatable.__namecall = newcclosure(function(...)
+		local args = {...}
+		if Locking and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+			args[3] = Plr.Character[getgenv().Partz].Position+(Plr.Character[getgenv().Partz].Velocity*Prediction)
+			return old(unpack(args))
+		end
+		return old(...)
+	end)
+
+
+	if getgenv().AirshotFunccc == true then
+
+		if Plr.Character.Humanoid.Jump == true and Plr.Character.Humanoid.FloorMaterial == Enum.Material.Air then
+			getgenv().Partz = "RightFoot"
+		else
+			Plr.Character:WaitForChild("Humanoid").StateChanged:Connect(function(old,new)
+				if new == Enum.HumanoidStateType.Freefall then
+					getgenv().Partz = "RightFoot"
+				else
+					getgenv().Partz = "LowerTorso"
+				end
+			end)
+		end
+	end
+	---
+	while wait() do
+		if getgenv().AutoPrediction == false then 
+			local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+			local split = string.split(pingvalue,'(')
+			local ping = tonumber(split[1])
+			if ping < 130 then
+				getgenv().Prediction = 0.151
+			elseif ping < 125 then
+				getgenv().Prediction = 0.149
+			elseif ping < 110 then
+				getgenv().Prediction = 0.146
+			elseif ping < 105 then
+				getgenv().Prediction = 0.138
+			elseif ping < 90 then
+				getgenv().Prediction = 0.136
+			elseif ping < 80 then
+				getgenv().Prediction = 0.134
+			elseif ping < 70 then
+				getgenv().Prediction = 0.131
+			elseif ping < 60 then
+				getgenv().Prediction = 0.160
+			elseif ping < 50 then
+				getgenv().Prediction = 0.153
+			elseif ping < 40 then
+				getgenv().Prediction = 0.15529888
+			end
+		end
+	end	
+end)
+
+Credits.Name = "Credits"
+Credits.Parent = DaddyHubFrame
+Credits.BackgroundColor3 = Color3.fromRGB(0, 46, 255)
+Credits.BackgroundTransparency = 100.000
+Credits.Position = UDim2.new(0.122199595, 0, 0.670175433, 0)
+Credits.Size = UDim2.new(0, 131, 0, 69)
+Credits.Text = "Credits: Mano76"
+Credits.TextColor3 = Color3.fromRGB(59, 0, 255)
+Credits.TextSize = 25.000
+
+Credits2.Name = "Credits2"
+Credits2.Parent = DaddyHubFrame
+Credits2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Credits2.BackgroundTransparency = 100.000
+Credits2.Position = UDim2.new(0.496945024, 0, 0.670175374, 0)
+Credits2.Size = UDim2.new(0, 246, 0, 81)
+Credits2.Text = ".gg/blazedW"
+Credits2.TextColor3 = Color3.fromRGB(25, 38, 221)
+Credits2.TextSize = 25.000
+
+Credits3.Name = "Credits3"
+Credits3.Parent = DaddyHubFrame
+Credits3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Credits3.BackgroundTransparency = 100.000
+Credits3.Position = UDim2.new(0.0224032663, 0, 0.740350842, 0)
+Credits3.Size = UDim2.new(0, 233, 0, 87)
+Credits3.Text = "Credits: sul 0009"
+Credits3.TextColor3 = Color3.fromRGB(21, 0, 255)
+Credits3.TextSize = 25.000
+
+DaddyhubTitle.Name = "Daddy hub Title"
+DaddyhubTitle.Parent = Daddyhub
+DaddyhubTitle.BackgroundColor3 = Color3.fromRGB(43, 6, 255)
+DaddyhubTitle.BorderColor3 = Color3.fromRGB(242, 247, 243)
+DaddyhubTitle.Position = UDim2.new(0.197226509, 0, 0.291277677, 0)
+DaddyhubTitle.Size = UDim2.new(0, 490, 0, 50)
+DaddyhubTitle.Font = Enum.Font.LuckiestGuy
+DaddyhubTitle.Text = "Daddy hub"
+DaddyhubTitle.TextColor3 = Color3.fromRGB(0, 0, 0)
+DaddyhubTitle.TextSize = 26.000
+
+-- scripts :
+
+local function RUGU_fake_script() -- DaddyHubFrame.Draggable 
+	local script = Instance.new('LocalScript', DaddyHubFrame.Draggable)
+
+	local UIS = game:GetService('UserInputService')
+	local frame = script.Parent
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end
+
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input)
+			end
+		end
+	end)
+end
+coroutine.wrap(RUGU_fake_script)()
+local function JQOVQEB_fake_script() -- Daddyhub.CloseToggle 
+	local script = Instance.new('LocalScript', Daddyhub)
+
+	local FrameObject = script.Parent.DaddyhubFrame
+	local Open = false
+
+
+	local UserInputService = game:GetService("UserInputService")
+
+	UserInputService.InputBegan:Connect(function(Input, gameprocess)
+		if not gameprocess then
+			if Input.KeyCode == Enum.KeyCode.V then
+				if Open then
+					Open = false
+					script.Parent.DaddyhubFrame.Visible = true
+				else
+					Open = true
+					script.Parent.DaddyhubFrame.Visible = false
+				end
+			end
+		end
+	end)
+
+end
+coroutine.wrap(JQOVQEB_fake_script)()
